@@ -1,51 +1,50 @@
-# SilentXx SmartToc — 智能文章目录组件
+# SilentXx SmartToc
 
-> 由 [SilentXx](https://silentxx.com) 设计与开源 · 为 Astro + React 站点提供自适应文章目录
+> **AI-powered adaptive table of contents for Astro + React sites.**
+> Designed & open-sourced by [SilentXx](https://silentxx.com).
 
-## 一句话简介
+[中文文档](./README.zh-CN.md) · [npm](https://www.npmjs.com/package/silentxx-smart-toc)
 
-一个"聪明的"目录组件：文章有标题结构就用**标题树目录**，文章没标题但够长就自动生成**段落导航目录**，短文自动显示"暂无目录"——无需修改任何文章内容，装上即可用。
+A "smart" TOC component that adapts to whatever your articles look like — real heading trees, AI-generated semantic chapters, pseudo-headings, paragraph navigation, or nothing at all. **No article rewrites required.**
 
-## 为什么需要它
+---
 
-大量从公众号 / 博客迁移过来的存量文章没有 Markdown 标题结构（没有 `##`/`###`），传统 TOC 组件对它们只会显示"暂无目录"。
-SilentXx SmartToc 通过**段落级导航**兜底：为每个有效段落生成锚点，目录显示"编号 + 段落开头预览"，让长文也能获得合理的阅读导航。
+## Why SmartToc?
 
-## 三种自适应模式
+Most blog content migrated from legacy platforms (WeChat, forums, old CMS) has **no Markdown heading structure** (`##`/`###`). Classic TOC components show "no TOC" for these articles, leaving long-form readers without navigation.
 
-| 文章情况                                  | 目录模式     | 说明                                                                |
-| ----------------------------------------- | ------------ | ------------------------------------------------------------------- |
-| 有 ≥2 个 `h2-h6` 标题                     | **标题树**   | 层级缩进 + 自动编号（1. / 1.1 / 1.2……），默认全展开，滚动手风琴定位 |
-| 无标题，但有 `toc-data/<slug>.json` 数据  | **AI 目录**  | 构建时 AI 智能聚类（哪几段讲同一意思 = 一章），生成精炼小标题       |
-| 无标题，存在独立短句（5-30字，≥3个）      | **伪标题**   | 识别作者用普通段落写的小标题（如「活在当下的真谛」），精炼有灵魂     |
-| 无标题/单标题，无伪标题，正文段落 ≥5      | **段落导航** | 每段一个锚点，`编号 + 段落开头18字预览`，点击平滑滚动               |
-| 短文（段落 <5）                           | 暂无目录     | 不强行生成，保持干净                                                |
+SilentXx SmartToc solves this with a **5-level degradation chain** — it always finds the best possible navigation for the content at hand:
 
-> 优先级：标题树 > AI 目录 > 伪标题目录 > 段落导航 > 暂无目录
+```
+Headings tree  →  AI semantic chapters  →  Pseudo-heading detection  →  Paragraph navigation  →  "No TOC"
+```
 
-## 功能特性
+## Features
 
-- 🔍 **智能降级**：标题不足时自动切换到段落导航，全程无需改文章
-- 🤖 **AI 智能目录**：无标题文章由 AI 按语义聚类（哪几段讲同一意思 = 一章）生成精炼小标题，仅输出到目录树、不改文章内容
-- ✨ **伪标题识别**：自动识别作者用普通短句写的小标题（如「活在当下的真谛」），生成精炼目录，无需改文章格式
-- 🧭 **滚动高亮**：随阅读位置自动高亮当前目录项（支持标题树手风琴展开/收拢）
-- 🖱 **平滑跳转**：点击目录项平滑滚动到对应位置
-- 🆔 **稳定锚点**：自动为标题生成保留中文的锚点 id（如 `#为什么剩下`），替代 `heading-0` 式弱 id
-- 🧹 **段落过滤**：自动排除纯图片段、引用块、列表、表格内的文字，避免目录噪音
-- 📦 **零内容改动**：纯前端组件，不碰 Markdown 源文件与渲染链
+- 🤖 **AI semantic chapters** — for articles without headings, an AI clusters adjacent paragraphs by meaning (paragraphs about the same topic → one chapter) and generates concise titles. Output goes **only to the sidebar TOC — the article content is never modified**.
+- 🌲 **Heading tree** — hierarchical indentation + auto numbering (1. / 1.1 / 1.2…), expanded by default, accordion scroll tracking.
+- ✨ **Pseudo-heading detection** — automatically recognizes standalone short lines (5–30 chars) that authors used as informal headings (e.g. 「活在当下的真谛」).
+- 📄 **Paragraph navigation** — last-resort fallback: one anchor per paragraph, numbered with an 18-char opening preview.
+- 🧭 **Scroll tracking** — the active item is highlighted as you read; smooth-scroll on click.
+- 🆔 **Stable Chinese-friendly anchors** — headings get real anchor ids like `#为什么剩下` instead of `heading-0`.
+- 🧹 **Smart filtering** — image-only paragraphs, blockquotes, lists and tables are excluded from navigation.
+- 📦 **Zero content changes** — pure client component; Markdown sources and the render pipeline stay untouched.
 
-## 安装与使用
+## Installation
 
-### 1. 前置
+```bash
+npm install silentxx-smart-toc
+```
 
-- [Astro](https://astro.build) 项目（≥ 4.x，7.x 已验证）
-- React 集成：`npx astro add react`
+Requires an Astro project with the React integration:
 
-### 2. 复制组件
+```bash
+npx astro add react
+```
 
-将 `SilentXxSmartToc.tsx` 放入你的组件目录（如 `src/components/layout/`）。
+## Quick Start
 
-### 3. 在侧边栏使用
+Copy the component into your project (e.g. `src/components/layout/SilentXxSmartToc.tsx`), then use it in your sidebar:
 
 ```astro
 ---
@@ -55,52 +54,111 @@ import { SilentXxSmartToc } from '@components/layout/SilentXxSmartToc';
 <SilentXxSmartToc client:load defaultExpanded />
 ```
 
-文章页需要把正文包在 `<article>` 标签内，组件会自动在 `article` 内收集标题/段落。
+The component automatically scans the `<article>` element on the page for headings and paragraphs — wrap your post body in `<article>` and you're done.
 
-### 4. Props
+## Props
 
-| 参数              | 类型      | 默认    | 说明                                              |
-| ----------------- | --------- | ------- | ------------------------------------------------- |
-| `defaultExpanded` | `boolean` | `false` | 标题树模式下是否默认展开所有子标题（建议 `true`） |
-| `tocDataUrl`      | `string`  | 自动    | AI 目录数据 JSON 地址，默认 `/toc-data/<slug>.json`（slug 从 URL 提取） |
+| Prop              | Type      | Default | Description                                                        |
+| ----------------- | --------- | ------- | ------------------------------------------------------------------ |
+| `defaultExpanded` | `boolean` | `false` | Expand all sub-headings in tree mode by default (recommended `true`) |
+| `tocDataUrl`      | `string`  | auto    | URL of the AI TOC data JSON. Defaults to `/toc-data/<slug>.json`, slug extracted from the current URL |
 
-## AI 目录数据（可选）
+## AI TOC Data (optional but powerful)
 
-无标题文章可提供构建时生成的 AI 目录数据，组件自动读取渲染（不改文章内容）：
+For articles without headings, drop a build-time-generated JSON file at `public/toc-data/<slug>.json` and the component will render it as semantic chapters. **The article itself is untouched.**
 
 ```json
 {
   "slug": "my-article",
   "generated": "2026-08-30",
   "sections": [
-    { "title": "章节标题", "anchor": "该章节起始段落的开头文字" }
+    { "title": "Chapter title", "anchor": "opening words of the chapter's first paragraph" }
   ]
 }
 ```
 
-- 文件放 `public/toc-data/<slug>.json`
-- `anchor` 用于在正文中定位该章节起始段落（`textContent` 前缀匹配）
-- 没有此文件时组件自动降级：伪标题识别 → 段落导航
+- `anchor` is matched against paragraph `textContent` prefixes to locate the chapter's start paragraph.
+- If the file is missing, the component degrades automatically: pseudo-heading detection → paragraph navigation.
 
-## 样式说明
+### Generating AI TOC data
 
-组件使用 **Tailwind CSS 类名 + CSS 变量**（`--primary`、`--muted-foreground` 等），与 SilentXx 主题一致的浅/深色自适应。在未定制主题的 Astro 项目中，可按需覆盖类名或提供对应 CSS 变量；后续版本将提供无样式（headless）版本。
+Ship a `generate-toc` step in your build (any LLM with a JSON mode works). Input: article body. Prompt the model to:
 
-## 兼容性
+1. Cluster adjacent paragraphs by topic — paragraphs about the same thing = one chapter.
+2. Produce a concise title (6–20 chars) per chapter.
+3. Emit `{ "sections": [{ "title", "anchor" }] }` where `anchor` is 4–12 chars copied verbatim from the chapter's first paragraph.
 
-- Astro 4.x / 5.x / 7.x（`client:load` React 组件）
+Validate anchors programmatically (each must prefix-match a real paragraph) before writing the JSON.
+
+## Markdown Normalization Tool (companion)
+
+`scripts/md-normalize.py` — for articles that *do* have informal headings but not valid Markdown:
+
+- Detects standalone short lines (5–30 chars) that act as headings.
+- Converts them to standard `##` headings (fixes `✨ 1.` numbering, soft line breaks, CJK quotes, etc.).
+- Excludes false positives: colon-terminated intro lines (`大宝剑是什么：`), sentence/emotion endings, image/quote/list paragraphs.
+- Backs up every file before conversion.
+
+Run it once to permanently normalize legacy articles — afterwards the heading tree kicks in directly.
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  SilentXxSmartToc (React, client:load)                  │
+│                                                         │
+│  1. Scan <article> for h2-h6                            │
+│     ├─ ≥2 headings ────────────────► Heading tree mode  │
+│     └─ otherwise ─────────────────────────────────┐     │
+│  2. fetch /toc-data/<slug>.json                    │     │
+│     ├─ valid sections ─────────────► AI chapter    │     │
+│     └─ missing/invalid ───────────────────────┐    │     │
+│  3. Pseudo-heading detection (5-30 char       │    │     │
+│     standalone lines, ≥3)                     │    │     │
+│     ├─ found ────────────────► Pseudo mode    │    │     │
+│     └─ none ─────────────────────────────┐    │    │     │
+│  4. Paragraph navigation (≥5 paragraphs)  │    │    │     │
+│     ├─ enough ───────────────► Paragraphs │    │    │     │
+│     └─ too short ────────────► "No TOC"   │    │    │     │
+│                                        └────┴────┘    │
+└─────────────────────────────────────────────────────────┘
+```
+
+Scroll tracking targets the active element in every mode; clicks smooth-scroll to the target.
+
+## Styling
+
+The component uses **Tailwind CSS utility classes + CSS variables** (`--primary`, `--muted-foreground`, …) consistent with the SilentXx theme (light/dark adaptive). In projects without a matching theme, override the classes or provide the CSS variables. A headless (unstyled) variant is planned.
+
+## Compatibility
+
+- Astro 4.x / 5.x / 7.x (`client:load` React component)
 - React 18+
-- 现代浏览器（`querySelectorAll`、`closest`、`scrollIntoView`）
+- Modern browsers (`querySelectorAll`, `closest`, `scrollIntoView`, `fetch`, optional chaining)
 
-## 版本记录
+## FAQ
 
-- **v1.2** — AI 智能目录：无标题文章由 AI 语义聚类生成精炼章节（构建时 JSON 数据），组件自动读取
-- **v1.1** — 新增伪标题识别：独立短句（5-30字）自动生成精炼目录
-- **v1.0** — 首版：标题树 + 段落导航双模式，滚动高亮，中文锚点
+**Q: Does the AI TOC data modify my articles?**
+A: No. TOC data lives in separate JSON files. The component renders them in the sidebar only. Articles stay byte-identical.
 
-## 关于品牌
+**Q: I don't want to generate AI data.**
+A: Fine — the component falls back to pseudo-heading detection, then paragraph navigation. Both are automatic.
 
-SilentXx（寂静猎手）—— 美股期权实战与稳定现金流系统，内容与工具开源共享。
-主页：https://silentxx.com · 问心：https://wenxin.silentxx.com
+**Q: My site isn't Tailwind.**
+A: The classes are still applied but unstyled unless you define the CSS variables. Override `.toc-container` styles or wait for the headless variant.
+
+**Q: Anchors with Chinese characters in the URL?**
+A: Intended — they are stable, readable and valid HTML5 ids (e.g. `#为什么剩下`).
+
+## Changelog
+
+- **v1.2** — AI semantic chapters (build-time JSON), `tocDataUrl` prop
+- **v1.1** — pseudo-heading detection (standalone 5–30 char lines)
+- **v1.0** — heading tree + paragraph navigation, scroll tracking, Chinese anchors
+
+## About the brand
+
+SilentXx (寂静猎手) — options trading & steady cashflow systems; content and tools open-sourced.
+Main site: https://silentxx.com · Moments (问心): https://wenxin.silentxx.com
 
 MIT License © 2026 SilentXx
