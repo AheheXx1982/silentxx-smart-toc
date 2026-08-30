@@ -1,0 +1,45 @@
+{
+  "name": "silentxx-smart-toc",
+  "version": "1.0.0",
+  "description": "SilentXx SmartToc — 智能文章目录组件：有标题用标题树，无标题自动生成段落导航目录，短文自动降级。为 Astro + React 站点设计。",
+  "keywords": [
+    "astro",
+    "astro-component",
+    "toc",
+    "table-of-contents",
+    "smart-toc",
+    "目录",
+    "silentxx"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "SilentXx (AheheXx1982)",
+    "url": "https://silentxx.com"
+  },
+  "homepage": "https://silentxx.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AheheXx1982/silentxx-smart-toc.git"
+  },
+  "type": "module",
+  "main": "./src/SilentXxSmartToc.tsx",
+  "types": "./src/SilentXxSmartToc.tsx",
+  "exports": {
+    ".": {
+      "types": "./src/SilentXxSmartToc.tsx",
+      "import": "./src/SilentXxSmartToc.tsx"
+    }
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "sideEffects": false
+}
