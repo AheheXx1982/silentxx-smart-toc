@@ -1,6 +1,6 @@
 {
   "name": "silentxx-smart-toc",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "SilentXx SmartToc — 智能文章目录组件：有标题用标题树，无标题自动生成段落导航目录，短文自动降级。为 Astro + React 站点设计。",
   "keywords": [
     "astro",
